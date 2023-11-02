@@ -1,0 +1,31 @@
+ name: Auto Add to Project
+
+on:
+  issues:
+    types:
+      - opened
+
+jobs:
+  add_to_project:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Add to Project
+        uses: actions/github-script@v4
+        with:
+          script: |
+            const { data: project } = await github.projects.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            });
+            const projectId = project.find(proj => proj.name === '-').id;   
+            await github.projects.createCard({
+              project_id: projectId,
+              content_id: context.issue.id,
+              content_type: 'Issue',
+              column_id:https://github.com/users/SEZGIN2332/projects/1
+            });
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+          
